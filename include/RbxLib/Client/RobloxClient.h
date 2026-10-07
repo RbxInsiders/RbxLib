@@ -40,6 +40,14 @@ public:
         std::uintptr_t DataModelGameId = 0;
         std::uintptr_t DataModelCreatorId = 0;
         std::uintptr_t DataModelGameLoaded = 0;
+        std::uintptr_t InstanceNameContainer = 0;
+        std::uintptr_t InstanceName = 0;
+        std::uintptr_t InstanceClassDescriptor = 0;
+        std::uintptr_t InstanceParent = 0;
+        std::uintptr_t InstanceChildrenStart = 0;
+        std::uintptr_t InstanceChildrenEnd = 0;
+        std::uintptr_t InstanceClassName = 0;
+        std::uintptr_t InstanceClassBase = 0;
     };
 
 private:

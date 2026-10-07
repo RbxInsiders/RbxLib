@@ -25,7 +25,7 @@ public:
 private:
     friend class RobloxClient;
 
-    explicit DataModel(std::shared_ptr<void> session);
+    explicit DataModel(std::shared_ptr<void> session, std::uintptr_t address);
 };
 
 }

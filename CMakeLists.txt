@@ -83,6 +83,7 @@ if(BUILD_TESTING)
     add_executable(RbxLibTests
         tests/Offsets/OffsetProviderTests.cpp
         tests/DataModel/DataModelTests.cpp
+        tests/Instances/InstanceTests.cpp
     )
     target_link_libraries(RbxLibTests
         PRIVATE

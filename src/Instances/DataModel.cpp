@@ -43,8 +43,8 @@ Winux::Core::Result<std::uint64_t> ReadField(
 
 DataModel::DataModel() = default;
 
-DataModel::DataModel(std::shared_ptr<void> session)
-    : Instance(std::move(session)) {}
+DataModel::DataModel(std::shared_ptr<void> session, const std::uintptr_t address)
+    : Instance(std::move(session), address) {}
 
 Winux::Core::Result<std::uint64_t> DataModel::PlaceId() const {
     return ReadField(

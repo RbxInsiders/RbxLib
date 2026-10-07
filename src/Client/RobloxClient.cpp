@@ -119,6 +119,22 @@ RobloxClient::RobloxClient(
         Offsets::OffsetId::DataModelCreatorId).value_or(0);
     m_session->DataModelGameLoaded = offsets.TryGet(
         Offsets::OffsetId::DataModelGameLoaded).value_or(0);
+    m_session->InstanceNameContainer = offsets.TryGet(
+        Offsets::OffsetId::InstanceNameContainer).value_or(0);
+    m_session->InstanceName = offsets.TryGet(
+        Offsets::OffsetId::InstanceName).value_or(0);
+    m_session->InstanceClassDescriptor = offsets.TryGet(
+        Offsets::OffsetId::InstanceClassDescriptor).value_or(0);
+    m_session->InstanceParent = offsets.TryGet(
+        Offsets::OffsetId::InstanceParent).value_or(0);
+    m_session->InstanceChildrenStart = offsets.TryGet(
+        Offsets::OffsetId::InstanceChildrenStart).value_or(0);
+    m_session->InstanceChildrenEnd = offsets.TryGet(
+        Offsets::OffsetId::InstanceChildrenEnd).value_or(0);
+    m_session->InstanceClassName = offsets.TryGet(
+        Offsets::OffsetId::InstanceClassName).value_or(0);
+    m_session->InstanceClassBase = offsets.TryGet(
+        Offsets::OffsetId::InstanceClassBase).value_or(0);
 }
 
 Winux::Core::Result<DataModel> RobloxClient::GetDataModel() const {
@@ -148,7 +164,8 @@ Winux::Core::Result<DataModel> RobloxClient::GetDataModel() const {
     }
 
     m_session->DataModelAddress = resolvedAddress.Value();
-    return Winux::Core::Result<DataModel>::Success(DataModel(m_session));
+    return Winux::Core::Result<DataModel>::Success(
+        DataModel(m_session, resolvedAddress.Value()));
 }
 
 std::uint32_t RobloxClient::ProcessId() const noexcept {
