@@ -37,6 +37,12 @@ protected:
 
     [[nodiscard]] std::shared_ptr<void> Session() const noexcept;
     [[nodiscard]] std::uintptr_t Address() const noexcept;
+    [[nodiscard]] Winux::Core::Result<std::uint32_t> ReadUInt32Field(
+        std::uintptr_t offset, std::string_view fieldName) const;
+    [[nodiscard]] Winux::Core::Result<std::int32_t> ReadInt32Field(
+        std::uintptr_t offset, std::string_view fieldName) const;
+    [[nodiscard]] Winux::Core::Result<std::string> ReadStringField(
+        std::uintptr_t offset, std::string_view fieldName) const;
 
 private:
     std::shared_ptr<void> m_session;

@@ -84,6 +84,7 @@ if(BUILD_TESTING)
         tests/Offsets/OffsetProviderTests.cpp
         tests/DataModel/DataModelTests.cpp
         tests/Instances/InstanceTests.cpp
+        tests/Players/PlayerTests.cpp
     )
     target_link_libraries(RbxLibTests
         PRIVATE
@@ -91,4 +92,12 @@ if(BUILD_TESTING)
             GTest::gtest_main
     )
     gtest_discover_tests(RbxLibTests)
+
+    add_executable(PlayerInstanceTests
+        tests/private/PlayerInstanceTests.cpp
+    )
+    target_link_libraries(PlayerInstanceTests
+        PRIVATE
+            RbxLib::RbxLib
+    )
 endif()

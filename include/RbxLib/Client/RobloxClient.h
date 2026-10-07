@@ -48,6 +48,9 @@ public:
         std::uintptr_t InstanceChildrenEnd = 0;
         std::uintptr_t InstanceClassName = 0;
         std::uintptr_t InstanceClassBase = 0;
+        std::uintptr_t PlayerUserId = 0;
+        std::uintptr_t PlayerDisplayName = 0;
+        std::uintptr_t PlayerAccountAge = 0;
     };
 
 private:

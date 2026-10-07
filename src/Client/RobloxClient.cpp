@@ -135,6 +135,12 @@ RobloxClient::RobloxClient(
         Offsets::OffsetId::InstanceClassName).value_or(0);
     m_session->InstanceClassBase = offsets.TryGet(
         Offsets::OffsetId::InstanceClassBase).value_or(0);
+    m_session->PlayerUserId = offsets.TryGet(
+        Offsets::OffsetId::PlayerUserId).value_or(0);
+    m_session->PlayerDisplayName = offsets.TryGet(
+        Offsets::OffsetId::PlayerDisplayName).value_or(0);
+    m_session->PlayerAccountAge = offsets.TryGet(
+        Offsets::OffsetId::PlayerAccountAge).value_or(0);
 }
 
 Winux::Core::Result<DataModel> RobloxClient::GetDataModel() const {

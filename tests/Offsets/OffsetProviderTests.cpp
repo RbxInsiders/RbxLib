@@ -121,6 +121,7 @@ TEST(OffsetProviderTests, EnumNamesUseJsonGroupAndField)
     EXPECT_EQ(OffsetIdName(OffsetId::FakeDataModelRealDataModel),
         "FakeDataModel.RealDataModel");
     EXPECT_EQ(OffsetIdName(OffsetId::DataModelPlaceId), "DataModel.PlaceId");
+    EXPECT_EQ(OffsetIdName(OffsetId::PlayerUserId), "Player.UserId");
 }
 
 TEST(JsonSourceTests, MapsKnownFieldsSkipsZeroAndReportsUnknownFields)
@@ -326,6 +327,27 @@ TEST(OffsetProviderTests, VersionChangeInvalidatesSnapshotWhenAnotherSourceIsSta
     EXPECT_FALSE(result.Success);
     EXPECT_FALSE(provider.TryGet(OffsetId::FakeDataModelPointer).has_value());
     EXPECT_TRUE(provider.CurrentVersion().empty());
+}
+
+TEST(JsonSourceTests, MapsPlayerIdentityFieldsAndSkipsZeroOffsets)
+{
+    FakeHttp http;
+    http.Responses = {
+        SuccessResponse("version-test"),
+        SuccessResponse(MakeOffsetsDocument("version-test",
+            R"({"Player":{"UserId":192,"DisplayName":296,"AccountAge":0}})"))
+    };
+    Sources::JsonSource source([&http](std::string_view url) {
+        return http.Get(url);
+    });
+
+    const auto result = source.Load();
+
+    ASSERT_TRUE(result.IsSuccess()) << result.Error;
+    EXPECT_EQ(result.Values.at(OffsetId::PlayerUserId), 192u);
+    EXPECT_EQ(result.Values.at(OffsetId::PlayerDisplayName), 296u);
+    EXPECT_FALSE(result.Values.contains(OffsetId::PlayerAccountAge));
+    EXPECT_TRUE(result.Diagnostics.empty());
 }
 
 }

@@ -20,6 +20,9 @@ enum class OffsetId : std::uint16_t {
     InstanceChildrenEnd,
     InstanceClassName,
     InstanceClassBase,
+    PlayerUserId,
+    PlayerDisplayName,
+    PlayerAccountAge,
 };
 
 [[nodiscard]] constexpr std::string_view OffsetIdName(OffsetId id) noexcept {
@@ -38,6 +41,9 @@ enum class OffsetId : std::uint16_t {
     case OffsetId::InstanceChildrenEnd: return "Instance.ChildrenEnd";
     case OffsetId::InstanceClassName: return "Instance.ClassName";
     case OffsetId::InstanceClassBase: return "Instance.ClassBase";
+    case OffsetId::PlayerUserId: return "Player.UserId";
+    case OffsetId::PlayerDisplayName: return "Player.DisplayName";
+    case OffsetId::PlayerAccountAge: return "Player.AccountAge";
     }
 
     return "UnknownOffset";

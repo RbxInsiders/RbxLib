@@ -22,7 +22,7 @@ struct JsonOffsetMapping {
     OffsetId Id;
 };
 
-constexpr std::array<JsonOffsetMapping, 14> Mappings{{
+constexpr std::array<JsonOffsetMapping, 17> Mappings{{
     {"FakeDataModel", "Pointer", OffsetId::FakeDataModelPointer},
     {"FakeDataModel", "RealDataModel", OffsetId::FakeDataModelRealDataModel},
     {"DataModel", "PlaceId", OffsetId::DataModelPlaceId},
@@ -37,10 +37,14 @@ constexpr std::array<JsonOffsetMapping, 14> Mappings{{
     {"Instance", "ChildrenEnd", OffsetId::InstanceChildrenEnd},
     {"Instance", "ClassName", OffsetId::InstanceClassName},
     {"Instance", "ClassBase", OffsetId::InstanceClassBase},
+    {"Player", "UserId", OffsetId::PlayerUserId},
+    {"Player", "DisplayName", OffsetId::PlayerDisplayName},
+    {"Player", "AccountAge", OffsetId::PlayerAccountAge},
 }};
 
 bool IsKnownGroup(std::string_view group) {
-    return group == "FakeDataModel" || group == "DataModel" || group == "Instance";
+    return group == "FakeDataModel" || group == "DataModel"
+        || group == "Instance" || group == "Player";
 }
 
 const JsonOffsetMapping* FindMapping(std::string_view group, std::string_view field) {
