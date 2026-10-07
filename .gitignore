@@ -1,7 +1,10 @@
 .vs
+.vscode
 build
+vcpkg_installed/
 out
 output
 x64
 Build
-RbxLib.vcxproj.user
+# private is internal planning and things that should not get committed to the main repo
+private

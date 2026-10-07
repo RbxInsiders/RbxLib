@@ -1,0 +1,16 @@
+function(rbxlib_read_version_file version_file output_variable)
+    if(NOT EXISTS "${version_file}")
+        message(FATAL_ERROR "Could not locate RbxLib version file: ${version_file}")
+    endif()
+
+    file(READ "${version_file}" _rbxlib_version)
+    string(STRIP "${_rbxlib_version}" _rbxlib_version)
+    if(NOT _rbxlib_version MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+\\.([0-9]+)$")
+        message(FATAL_ERROR "${version_file} must contain Major.Minor.Patch.Build")
+    endif()
+    if(CMAKE_MATCH_1 GREATER 4294967295)
+        message(FATAL_ERROR "${version_file} Build component must fit in a 32-bit unsigned integer")
+    endif()
+
+    set(${output_variable} "${_rbxlib_version}" PARENT_SCOPE)
+endfunction()
