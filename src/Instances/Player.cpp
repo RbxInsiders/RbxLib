@@ -46,4 +46,21 @@ Winux::Core::Result<std::int32_t> Player::AccountAge() const {
     return ReadInt32Field(session->PlayerAccountAge, "Player.AccountAge");
 }
 
+Winux::Core::Result<Instance> Player::Character() const {
+    const auto session = std::static_pointer_cast<RobloxClient::Session>(Session());
+    if (!session) {
+        return Winux::Core::Result<Instance>::Failure("Player session is unavailable");
+    }
+
+    const auto address = ReadPointerField(
+        session->PlayerModelInstance, "Player.ModelInstance");
+    if (!address.Succeeded()) {
+        return Winux::Core::Result<Instance>::Failure(address.Message());
+    }
+    if (address.Value() == 0) {
+        return Winux::Core::Result<Instance>::Success(Instance{});
+    }
+    return Winux::Core::Result<Instance>::Success(AtAddress(address.Value()));
+}
+
 }

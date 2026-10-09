@@ -100,4 +100,12 @@ if(BUILD_TESTING)
         PRIVATE
             RbxLib::RbxLib
     )
+
+    add_executable(PlayerProportionsTests
+        tests/private/PlayerProportionsTests.cpp
+    )
+    target_link_libraries(PlayerProportionsTests
+        PRIVATE
+            RbxLib::RbxLib
+    )
 endif()

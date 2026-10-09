@@ -51,6 +51,14 @@ public:
         std::uintptr_t PlayerUserId = 0;
         std::uintptr_t PlayerDisplayName = 0;
         std::uintptr_t PlayerAccountAge = 0;
+        std::uintptr_t PlayerModelInstance = 0;
+        std::uintptr_t BasePartPrimitive = 0;
+        std::uintptr_t PrimitiveAssemblyAngularVelocity = 0;
+        std::uintptr_t PrimitiveAssemblyLinearVelocity = 0;
+        std::uintptr_t PrimitiveFlags = 0;
+        std::uintptr_t PrimitivePosition = 0;
+        std::uintptr_t PrimitiveRotation = 0;
+        std::uintptr_t PrimitiveSize = 0;
     };
 
 private:

@@ -21,6 +21,7 @@ public:
     [[nodiscard]] Winux::Core::Result<std::uint32_t> UserId() const;
     [[nodiscard]] Winux::Core::Result<std::string> DisplayName() const;
     [[nodiscard]] Winux::Core::Result<std::int32_t> AccountAge() const;
+    [[nodiscard]] Winux::Core::Result<Instance> Character() const;
 
 private:
     explicit Player(const Instance& instance);

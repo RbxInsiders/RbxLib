@@ -122,6 +122,10 @@ TEST(OffsetProviderTests, EnumNamesUseJsonGroupAndField)
         "FakeDataModel.RealDataModel");
     EXPECT_EQ(OffsetIdName(OffsetId::DataModelPlaceId), "DataModel.PlaceId");
     EXPECT_EQ(OffsetIdName(OffsetId::PlayerUserId), "Player.UserId");
+    EXPECT_EQ(OffsetIdName(OffsetId::PlayerModelInstance), "Player.ModelInstance");
+    EXPECT_EQ(OffsetIdName(OffsetId::BasePartPrimitive), "BasePart.Primitive");
+    EXPECT_EQ(OffsetIdName(OffsetId::PrimitivePosition), "Primitive.Position");
+    EXPECT_EQ(OffsetIdName(OffsetId::PrimitiveFlags), "Primitive.Flags");
 }
 
 TEST(JsonSourceTests, MapsKnownFieldsSkipsZeroAndReportsUnknownFields)
@@ -347,6 +351,32 @@ TEST(JsonSourceTests, MapsPlayerIdentityFieldsAndSkipsZeroOffsets)
     EXPECT_EQ(result.Values.at(OffsetId::PlayerUserId), 192u);
     EXPECT_EQ(result.Values.at(OffsetId::PlayerDisplayName), 296u);
     EXPECT_FALSE(result.Values.contains(OffsetId::PlayerAccountAge));
+    EXPECT_TRUE(result.Diagnostics.empty());
+}
+
+TEST(JsonSourceTests, MapsCharacterBasePartAndPrimitiveFields)
+{
+    FakeHttp http;
+    http.Responses = {
+        SuccessResponse("version-test"),
+        SuccessResponse(MakeOffsetsDocument("version-test",
+            R"({"Player":{"ModelInstance":648},"BasePart":{"Primitive":376},"Primitive":{"AssemblyAngularVelocity":236,"AssemblyLinearVelocity":224,"Flags":438,"Position":212,"Rotation":176,"Size":444}})"))
+    };
+    Sources::JsonSource source([&http](std::string_view url) {
+        return http.Get(url);
+    });
+
+    const auto result = source.Load();
+
+    ASSERT_TRUE(result.IsSuccess()) << result.Error;
+    EXPECT_EQ(result.Values.at(OffsetId::PlayerModelInstance), 648u);
+    EXPECT_EQ(result.Values.at(OffsetId::BasePartPrimitive), 376u);
+    EXPECT_EQ(result.Values.at(OffsetId::PrimitiveAssemblyAngularVelocity), 236u);
+    EXPECT_EQ(result.Values.at(OffsetId::PrimitiveAssemblyLinearVelocity), 224u);
+    EXPECT_EQ(result.Values.at(OffsetId::PrimitiveFlags), 438u);
+    EXPECT_EQ(result.Values.at(OffsetId::PrimitivePosition), 212u);
+    EXPECT_EQ(result.Values.at(OffsetId::PrimitiveRotation), 176u);
+    EXPECT_EQ(result.Values.at(OffsetId::PrimitiveSize), 444u);
     EXPECT_TRUE(result.Diagnostics.empty());
 }
 

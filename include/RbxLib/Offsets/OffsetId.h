@@ -23,6 +23,14 @@ enum class OffsetId : std::uint16_t {
     PlayerUserId,
     PlayerDisplayName,
     PlayerAccountAge,
+    PlayerModelInstance,
+    BasePartPrimitive,
+    PrimitiveAssemblyAngularVelocity,
+    PrimitiveAssemblyLinearVelocity,
+    PrimitiveFlags,
+    PrimitivePosition,
+    PrimitiveRotation,
+    PrimitiveSize,
 };
 
 [[nodiscard]] constexpr std::string_view OffsetIdName(OffsetId id) noexcept {
@@ -44,6 +52,14 @@ enum class OffsetId : std::uint16_t {
     case OffsetId::PlayerUserId: return "Player.UserId";
     case OffsetId::PlayerDisplayName: return "Player.DisplayName";
     case OffsetId::PlayerAccountAge: return "Player.AccountAge";
+    case OffsetId::PlayerModelInstance: return "Player.ModelInstance";
+    case OffsetId::BasePartPrimitive: return "BasePart.Primitive";
+    case OffsetId::PrimitiveAssemblyAngularVelocity: return "Primitive.AssemblyAngularVelocity";
+    case OffsetId::PrimitiveAssemblyLinearVelocity: return "Primitive.AssemblyLinearVelocity";
+    case OffsetId::PrimitiveFlags: return "Primitive.Flags";
+    case OffsetId::PrimitivePosition: return "Primitive.Position";
+    case OffsetId::PrimitiveRotation: return "Primitive.Rotation";
+    case OffsetId::PrimitiveSize: return "Primitive.Size";
     }
 
     return "UnknownOffset";

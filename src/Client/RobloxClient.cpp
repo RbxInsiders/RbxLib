@@ -141,6 +141,22 @@ RobloxClient::RobloxClient(
         Offsets::OffsetId::PlayerDisplayName).value_or(0);
     m_session->PlayerAccountAge = offsets.TryGet(
         Offsets::OffsetId::PlayerAccountAge).value_or(0);
+    m_session->PlayerModelInstance = offsets.TryGet(
+        Offsets::OffsetId::PlayerModelInstance).value_or(0);
+    m_session->BasePartPrimitive = offsets.TryGet(
+        Offsets::OffsetId::BasePartPrimitive).value_or(0);
+    m_session->PrimitiveAssemblyAngularVelocity = offsets.TryGet(
+        Offsets::OffsetId::PrimitiveAssemblyAngularVelocity).value_or(0);
+    m_session->PrimitiveAssemblyLinearVelocity = offsets.TryGet(
+        Offsets::OffsetId::PrimitiveAssemblyLinearVelocity).value_or(0);
+    m_session->PrimitiveFlags = offsets.TryGet(
+        Offsets::OffsetId::PrimitiveFlags).value_or(0);
+    m_session->PrimitivePosition = offsets.TryGet(
+        Offsets::OffsetId::PrimitivePosition).value_or(0);
+    m_session->PrimitiveRotation = offsets.TryGet(
+        Offsets::OffsetId::PrimitiveRotation).value_or(0);
+    m_session->PrimitiveSize = offsets.TryGet(
+        Offsets::OffsetId::PrimitiveSize).value_or(0);
 }
 
 Winux::Core::Result<DataModel> RobloxClient::GetDataModel() const {

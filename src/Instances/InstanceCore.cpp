@@ -141,6 +141,21 @@ std::uintptr_t Instance::Address() const noexcept {
     return m_address;
 }
 
+Instance Instance::AtAddress(const std::uintptr_t address) const {
+    return Instance(m_session, address);
+}
+
+Winux::Core::Result<std::uintptr_t> Instance::ReadPointerField(
+    const std::uintptr_t offset,
+    const std::string_view fieldName) const {
+    const auto session = GetSession(m_session);
+    if (!IsValid()) {
+        return Winux::Core::Result<std::uintptr_t>::Failure("Instance is not valid");
+    }
+
+    return ReadOffset(session, m_address, offset, fieldName);
+}
+
 Winux::Core::Result<std::uint32_t> Instance::ReadUInt32Field(
     const std::uintptr_t offset,
     const std::string_view fieldName) const {

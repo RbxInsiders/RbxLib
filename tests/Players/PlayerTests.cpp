@@ -1,4 +1,5 @@
 #include <RbxLib/Client/RobloxClient.h>
+#include <RbxLib/Instances/BasePart.h>
 #include <RbxLib/Instances/Player.h>
 #include <RbxLib/Offsets/OffsetProvider.h>
 
@@ -6,6 +7,8 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -93,6 +96,70 @@ TEST_F(LivePlayerTestFixture, RejectsNonPlayerInstances) {
     const auto player = Player::FromInstance(workspace.Value());
     EXPECT_FALSE(player.Succeeded());
     EXPECT_NE(player.Message().find("not a Player"), std::string::npos);
+}
+
+TEST_F(LivePlayerTestFixture, ReadsCharacterBasePartPrimitiveFields) {
+    const auto client = MakeClient();
+    const auto dataModel = client->GetDataModel();
+    ASSERT_TRUE(dataModel.Succeeded()) << dataModel.Message();
+
+    const auto playersService = dataModel.Value().FindFirstChildOfClass("Players");
+    ASSERT_TRUE(playersService.Succeeded()) << playersService.Message();
+    const auto players = playersService.Value().GetChildren();
+    ASSERT_TRUE(players.Succeeded()) << players.Message();
+    ASSERT_FALSE(players.Value().empty());
+
+    const auto player = Player::FromInstance(players.Value().front());
+    ASSERT_TRUE(player.Succeeded()) << player.Message();
+    const auto character = player.Value().Character();
+    ASSERT_TRUE(character.Succeeded()) << character.Message();
+    ASSERT_TRUE(character.Value().IsValid()) << "Player has no spawned character";
+
+    const auto rootPart = character.Value().FindFirstChild("HumanoidRootPart");
+    ASSERT_TRUE(rootPart.Succeeded()) << rootPart.Message();
+    ASSERT_TRUE(rootPart.Value().IsValid());
+    const auto basePart = BasePart::FromInstance(rootPart.Value());
+    ASSERT_TRUE(basePart.Succeeded()) << basePart.Message();
+
+    const auto primitive = basePart.Value().GetPrimitive();
+    ASSERT_TRUE(primitive.Succeeded()) << primitive.Message();
+    EXPECT_TRUE(primitive.Value().IsValid());
+
+    const auto position = primitive.Value().Position();
+    const auto rotation = primitive.Value().Rotation();
+    const auto size = primitive.Value().Size();
+    const auto linearVelocity = primitive.Value().AssemblyLinearVelocity();
+    const auto angularVelocity = primitive.Value().AssemblyAngularVelocity();
+    const auto flags = primitive.Value().Flags();
+    const auto anchored = primitive.Value().IsAnchored();
+    const auto canCollide = primitive.Value().CanCollide();
+    const auto canTouch = primitive.Value().CanTouch();
+    const auto canQuery = primitive.Value().CanQuery();
+
+    ASSERT_TRUE(position.Succeeded()) << position.Message();
+    ASSERT_TRUE(rotation.Succeeded()) << rotation.Message();
+    ASSERT_TRUE(size.Succeeded()) << size.Message();
+    ASSERT_TRUE(linearVelocity.Succeeded()) << linearVelocity.Message();
+    ASSERT_TRUE(angularVelocity.Succeeded()) << angularVelocity.Message();
+    ASSERT_TRUE(flags.Succeeded()) << flags.Message();
+    ASSERT_TRUE(anchored.Succeeded()) << anchored.Message();
+    ASSERT_TRUE(canCollide.Succeeded()) << canCollide.Message();
+    ASSERT_TRUE(canTouch.Succeeded()) << canTouch.Message();
+    ASSERT_TRUE(canQuery.Succeeded()) << canQuery.Message();
+
+    const auto containsOnlyFiniteValues = [](const auto& values) {
+        return std::all_of(values.begin(), values.end(), [](const float value) {
+            return std::isfinite(value);
+        });
+    };
+    EXPECT_TRUE(containsOnlyFiniteValues(position.Value()));
+    EXPECT_TRUE(containsOnlyFiniteValues(rotation.Value()));
+    EXPECT_TRUE(containsOnlyFiniteValues(size.Value()));
+    EXPECT_TRUE(containsOnlyFiniteValues(linearVelocity.Value()));
+    EXPECT_TRUE(containsOnlyFiniteValues(angularVelocity.Value()));
+    EXPECT_GT(size.Value()[0], 0.0f);
+    EXPECT_GT(size.Value()[1], 0.0f);
+    EXPECT_GT(size.Value()[2], 0.0f);
 }
 
 }
