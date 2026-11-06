@@ -73,6 +73,7 @@ target_include_directories(RbxLib
 target_link_libraries(RbxLib
     PUBLIC
         nlohmann_json::nlohmann_json
+    PRIVATE
         Winux
 )
 
@@ -83,6 +84,7 @@ if(BUILD_TESTING)
     add_executable(RbxLibTests
         tests/Offsets/OffsetProviderTests.cpp
         tests/DataModel/DataModelTests.cpp
+        tests/Rendering/RenderViewTests.cpp
         tests/Instances/InstanceTests.cpp
         tests/Players/PlayerTests.cpp
     )
@@ -90,6 +92,7 @@ if(BUILD_TESTING)
         PRIVATE
             RbxLib::RbxLib
             GTest::gtest_main
+            Winux
     )
     gtest_discover_tests(RbxLibTests)
 
@@ -99,6 +102,7 @@ if(BUILD_TESTING)
     target_link_libraries(PlayerInstanceTests
         PRIVATE
             RbxLib::RbxLib
+            Winux
     )
 
     add_executable(PlayerProportionsTests
@@ -107,5 +111,6 @@ if(BUILD_TESTING)
     target_link_libraries(PlayerProportionsTests
         PRIVATE
             RbxLib::RbxLib
+            Winux
     )
 endif()

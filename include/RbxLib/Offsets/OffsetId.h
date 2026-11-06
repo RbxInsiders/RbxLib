@@ -31,6 +31,9 @@ enum class OffsetId : std::uint16_t {
     PrimitivePosition,
     PrimitiveRotation,
     PrimitiveSize,
+    VisualEnginePointer,
+    VisualEngineDimensions,
+    VisualEngineViewMatrix,
 };
 
 [[nodiscard]] constexpr std::string_view OffsetIdName(OffsetId id) noexcept {
@@ -60,6 +63,9 @@ enum class OffsetId : std::uint16_t {
     case OffsetId::PrimitivePosition: return "Primitive.Position";
     case OffsetId::PrimitiveRotation: return "Primitive.Rotation";
     case OffsetId::PrimitiveSize: return "Primitive.Size";
+    case OffsetId::VisualEnginePointer: return "VisualEngine.Pointer";
+    case OffsetId::VisualEngineDimensions: return "VisualEngine.Dimensions";
+    case OffsetId::VisualEngineViewMatrix: return "VisualEngine.ViewMatrix";
     }
 
     return "UnknownOffset";

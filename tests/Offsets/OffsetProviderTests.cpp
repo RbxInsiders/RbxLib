@@ -126,6 +126,9 @@ TEST(OffsetProviderTests, EnumNamesUseJsonGroupAndField)
     EXPECT_EQ(OffsetIdName(OffsetId::BasePartPrimitive), "BasePart.Primitive");
     EXPECT_EQ(OffsetIdName(OffsetId::PrimitivePosition), "Primitive.Position");
     EXPECT_EQ(OffsetIdName(OffsetId::PrimitiveFlags), "Primitive.Flags");
+    EXPECT_EQ(OffsetIdName(OffsetId::VisualEnginePointer), "VisualEngine.Pointer");
+    EXPECT_EQ(OffsetIdName(OffsetId::VisualEngineDimensions), "VisualEngine.Dimensions");
+    EXPECT_EQ(OffsetIdName(OffsetId::VisualEngineViewMatrix), "VisualEngine.ViewMatrix");
 }
 
 TEST(JsonSourceTests, MapsKnownFieldsSkipsZeroAndReportsUnknownFields)
@@ -134,7 +137,7 @@ TEST(JsonSourceTests, MapsKnownFieldsSkipsZeroAndReportsUnknownFields)
     http.Responses = {
         SuccessResponse("version-test\r\n"),
         SuccessResponse(MakeOffsetsDocument("version-test",
-            R"({"FakeDataModel":{"Pointer":112,"RealDataModel":0,"Extra":8},"DataModel":{"PlaceId":416,"GameLoaded":0,"Extra":1},"Other":{"Value":5}})"))
+            R"({"FakeDataModel":{"Pointer":112,"RealDataModel":0,"Extra":8},"DataModel":{"PlaceId":416,"GameLoaded":0,"Extra":1},"VisualEngine":{"Pointer":140038664,"Dimensions":2832,"ViewMatrix":432},"Other":{"Value":5}})"))
     };
     Sources::JsonSource source([&http](std::string_view url) {
         return http.Get(url);
@@ -144,9 +147,12 @@ TEST(JsonSourceTests, MapsKnownFieldsSkipsZeroAndReportsUnknownFields)
 
     ASSERT_TRUE(result.IsSuccess()) << result.Error;
     EXPECT_EQ(result.Version, "version-test");
-    ASSERT_EQ(result.Values.size(), 2u);
+    ASSERT_EQ(result.Values.size(), 5u);
     EXPECT_EQ(result.Values.at(OffsetId::FakeDataModelPointer), 112u);
     EXPECT_EQ(result.Values.at(OffsetId::DataModelPlaceId), 416u);
+    EXPECT_EQ(result.Values.at(OffsetId::VisualEnginePointer), 140038664u);
+    EXPECT_EQ(result.Values.at(OffsetId::VisualEngineDimensions), 2832u);
+    EXPECT_EQ(result.Values.at(OffsetId::VisualEngineViewMatrix), 432u);
     EXPECT_FALSE(result.Values.contains(OffsetId::FakeDataModelRealDataModel));
     EXPECT_EQ(result.Diagnostics.size(), 3u);
     EXPECT_NE(std::find(result.Diagnostics.begin(), result.Diagnostics.end(),

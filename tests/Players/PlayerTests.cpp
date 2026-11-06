@@ -24,7 +24,6 @@ protected:
         m_initialized = true;
 
         m_process = &Winux::Get<Winux::Process>();
-        m_memory = &Winux::Get<Winux::Memory>();
 
         const auto process = m_process->FindProcess(L"RobloxPlayerBeta.exe");
         ASSERT_TRUE(process.Succeeded()) << process.Message();
@@ -45,14 +44,13 @@ protected:
 
     std::unique_ptr<RobloxClient> MakeClient() const {
         return std::make_unique<RobloxClient>(
-            m_processId, *m_process, *m_memory, *m_offsets);
+            m_processId, *m_offsets);
     }
 
 private:
     bool m_initialized = false;
     std::uint32_t m_processId = 0;
     Winux::Process* m_process = nullptr;
-    Winux::Memory* m_memory = nullptr;
     std::unique_ptr<Offsets::OffsetProvider> m_offsets;
 };
 

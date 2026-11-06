@@ -1,8 +1,7 @@
 #pragma once
 
+#include <RbxLib/Core/Result.h>
 #include <RbxLib/Instances/Instance.h>
-
-#include <Winux/Winux.h>
 
 #include <cstdint>
 #include <memory>
@@ -17,10 +16,10 @@ public:
     DataModel& operator=(const DataModel& other) = default;
     DataModel& operator=(DataModel&& other) noexcept = default;
 
-    [[nodiscard]] Winux::Core::Result<std::uint64_t> PlaceId() const;
-    [[nodiscard]] Winux::Core::Result<std::uint64_t> GameId() const;
-    [[nodiscard]] Winux::Core::Result<std::uint64_t> CreatorId() const;
-    [[nodiscard]] Winux::Core::Result<bool> GameLoaded() const;
+    [[nodiscard]] Core::Result<std::uint64_t> PlaceId() const;
+    [[nodiscard]] Core::Result<std::uint64_t> GameId() const;
+    [[nodiscard]] Core::Result<std::uint64_t> CreatorId() const;
+    [[nodiscard]] Core::Result<bool> GameLoaded() const;
 
 private:
     friend class RobloxClient;

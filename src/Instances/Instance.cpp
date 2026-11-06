@@ -4,27 +4,27 @@
 
 namespace RbxLib::Roblox {
 
-Winux::Core::Result<Instance> Instance::FindFirstChild(const std::string_view name) const {
+Core::Result<Instance> Instance::FindFirstChild(const std::string_view name) const {
     const auto children = GetChildren();
     if (!children.Succeeded()) {
-        return Winux::Core::Result<Instance>::Failure(children.Message());
+        return Core::Result<Instance>::Failure(children.Message());
     }
     for (const auto& child : children.Value()) {
         const auto childName = child.Name();
         if (!childName.Succeeded()) {
-            return Winux::Core::Result<Instance>::Failure(childName.Message());
+            return Core::Result<Instance>::Failure(childName.Message());
         }
         if (childName.Value() == name) {
-            return Winux::Core::Result<Instance>::Success(child);
+            return Core::Result<Instance>::Success(child);
         }
     }
-    return Winux::Core::Result<Instance>::Success(Instance{});
+    return Core::Result<Instance>::Success(Instance{});
 }
 
-Winux::Core::Result<Instance> Instance::FindFirstChildFromPath(
+Core::Result<Instance> Instance::FindFirstChildFromPath(
     const std::string_view path) const {
     if (path.empty()) {
-        return Winux::Core::Result<Instance>::Success(Instance{});
+        return Core::Result<Instance>::Success(Instance{});
     }
 
     Instance current = *this;
@@ -33,7 +33,7 @@ Winux::Core::Result<Instance> Instance::FindFirstChildFromPath(
         const auto separator = path.find('.', start);
         const auto end = separator == std::string_view::npos ? path.size() : separator;
         if (end == start) {
-            return Winux::Core::Result<Instance>::Success(Instance{});
+            return Core::Result<Instance>::Success(Instance{});
         }
         const auto child = current.FindFirstChild(path.substr(start, end - start));
         if (!child.Succeeded() || !child.Value().IsValid()) {
@@ -45,61 +45,61 @@ Winux::Core::Result<Instance> Instance::FindFirstChildFromPath(
         }
         start = separator + 1;
     }
-    return Winux::Core::Result<Instance>::Success(std::move(current));
+    return Core::Result<Instance>::Success(std::move(current));
 }
 
-Winux::Core::Result<Instance> Instance::FindFirstDescendant(
+Core::Result<Instance> Instance::FindFirstDescendant(
     const std::string_view name) const {
     const auto descendants = GetDescendants();
     if (!descendants.Succeeded()) {
-        return Winux::Core::Result<Instance>::Failure(descendants.Message());
+        return Core::Result<Instance>::Failure(descendants.Message());
     }
     for (const auto& descendant : descendants.Value()) {
         const auto descendantName = descendant.Name();
         if (!descendantName.Succeeded()) {
-            return Winux::Core::Result<Instance>::Failure(descendantName.Message());
+            return Core::Result<Instance>::Failure(descendantName.Message());
         }
         if (descendantName.Value() == name) {
-            return Winux::Core::Result<Instance>::Success(descendant);
+            return Core::Result<Instance>::Success(descendant);
         }
     }
-    return Winux::Core::Result<Instance>::Success(Instance{});
+    return Core::Result<Instance>::Success(Instance{});
 }
 
-Winux::Core::Result<Instance> Instance::FindFirstChildOfClass(
+Core::Result<Instance> Instance::FindFirstChildOfClass(
     const std::string_view className) const {
     const auto children = GetChildren();
     if (!children.Succeeded()) {
-        return Winux::Core::Result<Instance>::Failure(children.Message());
+        return Core::Result<Instance>::Failure(children.Message());
     }
     for (const auto& child : children.Value()) {
         const auto childClass = child.ClassName();
         if (!childClass.Succeeded()) {
-            return Winux::Core::Result<Instance>::Failure(childClass.Message());
+            return Core::Result<Instance>::Failure(childClass.Message());
         }
         if (childClass.Value() == className) {
-            return Winux::Core::Result<Instance>::Success(child);
+            return Core::Result<Instance>::Success(child);
         }
     }
-    return Winux::Core::Result<Instance>::Success(Instance{});
+    return Core::Result<Instance>::Success(Instance{});
 }
 
-Winux::Core::Result<Instance> Instance::FindFirstChildWhichIsA(
+Core::Result<Instance> Instance::FindFirstChildWhichIsA(
     const std::string_view className) const {
     const auto children = GetChildren();
     if (!children.Succeeded()) {
-        return Winux::Core::Result<Instance>::Failure(children.Message());
+        return Core::Result<Instance>::Failure(children.Message());
     }
     for (const auto& child : children.Value()) {
         const auto isA = child.IsA(className);
         if (!isA.Succeeded()) {
-            return Winux::Core::Result<Instance>::Failure(isA.Message());
+            return Core::Result<Instance>::Failure(isA.Message());
         }
         if (isA.Value()) {
-            return Winux::Core::Result<Instance>::Success(child);
+            return Core::Result<Instance>::Success(child);
         }
     }
-    return Winux::Core::Result<Instance>::Success(Instance{});
+    return Core::Result<Instance>::Success(Instance{});
 }
 
 }

@@ -31,7 +31,6 @@ protected:
         }
 
         m_process = &Winux::Get<Winux::Process>();
-        m_memory = &Winux::Get<Winux::Memory>();
     }
 
     void TearDown() override {
@@ -50,15 +49,11 @@ protected:
         }
     }
 
-    Winux::Process& Process() const noexcept { return *m_process; }
-    Winux::Memory& Memory() const noexcept { return *m_memory; }
-
 private:
     Winux::Process* m_process = nullptr;
-    Winux::Memory* m_memory = nullptr;
 };
 
-TEST_F(LiveDataModelTestFixture, ResolvesDataModelAndReadsVerifiedFields) {
+TEST_F(LiveDataModelTestFixture, ResolvesDataModelAndVisualEngine) {
     std::optional<std::uint32_t> processId;
     RequireRobloxProcess(processId);
     ASSERT_TRUE(processId.has_value());
@@ -69,7 +64,7 @@ TEST_F(LiveDataModelTestFixture, ResolvesDataModelAndReadsVerifiedFields) {
         GTEST_SKIP() << "Unable to load live Roblox offsets: " << refresh.Error;
     }
 
-    RobloxClient client(*processId, Process(), Memory(), *provider);
+    RobloxClient client(*processId, *provider);
     const auto dataModel = client.GetDataModel();
 
     ASSERT_TRUE(dataModel.Succeeded()) << dataModel.Message();
@@ -78,16 +73,23 @@ TEST_F(LiveDataModelTestFixture, ResolvesDataModelAndReadsVerifiedFields) {
     const auto gameId = dataModel.Value().GameId();
     const auto creatorId = dataModel.Value().CreatorId();
     const auto gameLoaded = dataModel.Value().GameLoaded();
+    const auto visualEngine = client.GetVisualEngine();
 
     ASSERT_TRUE(placeId.Succeeded());
     ASSERT_TRUE(gameId.Succeeded());
     ASSERT_TRUE(creatorId.Succeeded());
     ASSERT_TRUE(gameLoaded.Succeeded());
+    ASSERT_TRUE(visualEngine.Succeeded()) << visualEngine.Message();
+
+    const auto view = visualEngine.Value().Snapshot();
+    ASSERT_TRUE(view.Succeeded()) << view.Message();
 
     EXPECT_GT(placeId.Value(), 0u);
     EXPECT_GT(gameId.Value(), 0u);
     EXPECT_GT(creatorId.Value(), 0u);
     EXPECT_TRUE(gameLoaded.Value());
+    EXPECT_GT(view.Value().viewportSize[0], 0.0f);
+    EXPECT_GT(view.Value().viewportSize[1], 0.0f);
 }
 
 TEST_F(LiveDataModelTestFixture, StaleDataModelFailsAfterClientIsDestroyed) {
@@ -102,7 +104,7 @@ TEST_F(LiveDataModelTestFixture, StaleDataModelFailsAfterClientIsDestroyed) {
     }
 
     auto client = std::make_unique<RobloxClient>(
-        *processId, Process(), Memory(), *provider);
+        *processId, *provider);
     const auto dataModel = client->GetDataModel();
     ASSERT_TRUE(dataModel.Succeeded()) << dataModel.Message();
 

@@ -1,29 +1,45 @@
 #pragma once
 
-#include <RbxLib/Core/RobloxError.h>
-
 #include <optional>
+#include <string>
 #include <utility>
 
 namespace RbxLib::Core {
+
+enum class ResultStatus {
+    Success,
+    Failure
+};
 
 template <typename TValue>
 class Result {
 public:
     [[nodiscard]] static Result Success(TValue value) {
-        return Result(std::move(value));
+        return Result(ResultStatus::Success, std::move(value), {});
     }
 
-    [[nodiscard]] static Result Failure(RobloxError error) {
-        return Result(std::move(error));
+    [[nodiscard]] static Result Failure(std::string message) {
+        return Result(ResultStatus::Failure, std::nullopt, std::move(message));
+    }
+
+    [[nodiscard]] ResultStatus Status() const noexcept {
+        return m_status;
+    }
+
+    [[nodiscard]] bool Succeeded() const noexcept {
+        return m_status == ResultStatus::Success;
+    }
+
+    [[nodiscard]] bool Failed() const noexcept {
+        return m_status == ResultStatus::Failure;
     }
 
     [[nodiscard]] bool HasValue() const noexcept {
-        return m_value.has_value();
+        return Succeeded();
     }
 
     explicit operator bool() const noexcept {
-        return HasValue();
+        return Succeeded();
     }
 
     [[nodiscard]] TValue& Value() & {
@@ -38,51 +54,68 @@ public:
         return std::move(m_value.value());
     }
 
-    [[nodiscard]] const RobloxError& Error() const& {
-        return m_error.value();
+    [[nodiscard]] const std::string& Message() const noexcept {
+        return m_message;
+    }
+
+    [[nodiscard]] const std::string& Error() const noexcept {
+        return m_message;
     }
 
 private:
-    explicit Result(TValue value)
-        : m_value(std::move(value)) {}
+    Result(ResultStatus status, std::optional<TValue> value, std::string message)
+        : m_status(status), m_value(std::move(value)), m_message(std::move(message)) {}
 
-    explicit Result(RobloxError error)
-        : m_error(std::move(error)) {}
-
+    ResultStatus m_status;
     std::optional<TValue> m_value;
-    std::optional<RobloxError> m_error;
+    std::string m_message;
 };
 
 template <>
 class Result<void> {
 public:
     [[nodiscard]] static Result Success() {
-        return Result();
+        return Result(ResultStatus::Success, {});
     }
 
-    [[nodiscard]] static Result Failure(RobloxError error) {
-        return Result(std::move(error));
+    [[nodiscard]] static Result Failure(std::string message) {
+        return Result(ResultStatus::Failure, std::move(message));
+    }
+
+    [[nodiscard]] ResultStatus Status() const noexcept {
+        return m_status;
+    }
+
+    [[nodiscard]] bool Succeeded() const noexcept {
+        return m_status == ResultStatus::Success;
+    }
+
+    [[nodiscard]] bool Failed() const noexcept {
+        return m_status == ResultStatus::Failure;
     }
 
     [[nodiscard]] bool HasValue() const noexcept {
-        return !m_error.has_value();
+        return Succeeded();
     }
 
     explicit operator bool() const noexcept {
-        return HasValue();
+        return Succeeded();
     }
 
-    [[nodiscard]] const RobloxError& Error() const& {
-        return m_error.value();
+    [[nodiscard]] const std::string& Message() const noexcept {
+        return m_message;
+    }
+
+    [[nodiscard]] const std::string& Error() const noexcept {
+        return m_message;
     }
 
 private:
-    Result() = default;
+    Result(ResultStatus status, std::string message)
+        : m_status(status), m_message(std::move(message)) {}
 
-    explicit Result(RobloxError error)
-        : m_error(std::move(error)) {}
-
-    std::optional<RobloxError> m_error;
+    ResultStatus m_status;
+    std::string m_message;
 };
 
 }

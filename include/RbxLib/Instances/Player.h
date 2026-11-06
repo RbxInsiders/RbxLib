@@ -1,5 +1,6 @@
 #pragma once
 
+#include <RbxLib/Core/Result.h>
 #include <RbxLib/Instances/Instance.h>
 
 #include <cstdint>
@@ -15,13 +16,13 @@ public:
     Player& operator=(const Player& other) = default;
     Player& operator=(Player&& other) noexcept = default;
 
-    [[nodiscard]] static Winux::Core::Result<Player> FromInstance(
+    [[nodiscard]] static Core::Result<Player> FromInstance(
         const Instance& instance);
 
-    [[nodiscard]] Winux::Core::Result<std::uint32_t> UserId() const;
-    [[nodiscard]] Winux::Core::Result<std::string> DisplayName() const;
-    [[nodiscard]] Winux::Core::Result<std::int32_t> AccountAge() const;
-    [[nodiscard]] Winux::Core::Result<Instance> Character() const;
+    [[nodiscard]] Core::Result<std::uint32_t> UserId() const;
+    [[nodiscard]] Core::Result<std::string> DisplayName() const;
+    [[nodiscard]] Core::Result<std::int32_t> AccountAge() const;
+    [[nodiscard]] Core::Result<Instance> Character() const;
 
 private:
     explicit Player(const Instance& instance);

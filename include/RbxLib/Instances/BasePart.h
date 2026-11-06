@@ -1,5 +1,6 @@
 #pragma once
 
+#include <RbxLib/Core/Result.h>
 #include <RbxLib/Instances/Instance.h>
 #include <RbxLib/Instances/Primitive.h>
 
@@ -15,9 +16,9 @@ public:
     BasePart& operator=(const BasePart& other) = default;
     BasePart& operator=(BasePart&& other) noexcept = default;
 
-    [[nodiscard]] static Winux::Core::Result<BasePart> FromInstance(
+    [[nodiscard]] static Core::Result<BasePart> FromInstance(
         const Instance& instance);
-    [[nodiscard]] Winux::Core::Result<Primitive> GetPrimitive() const;
+    [[nodiscard]] Core::Result<Primitive> GetPrimitive() const;
 
 private:
     explicit BasePart(const Instance& instance);
