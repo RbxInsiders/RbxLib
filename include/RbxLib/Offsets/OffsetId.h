@@ -24,6 +24,8 @@ enum class OffsetId : std::uint16_t {
     PlayerDisplayName,
     PlayerAccountAge,
     PlayerModelInstance,
+    HumanoidHealth,
+    HumanoidMaxHealth,
     BasePartPrimitive,
     PrimitiveAssemblyAngularVelocity,
     PrimitiveAssemblyLinearVelocity,
@@ -56,6 +58,8 @@ enum class OffsetId : std::uint16_t {
     case OffsetId::PlayerDisplayName: return "Player.DisplayName";
     case OffsetId::PlayerAccountAge: return "Player.AccountAge";
     case OffsetId::PlayerModelInstance: return "Player.ModelInstance";
+    case OffsetId::HumanoidHealth: return "Humanoid.Health";
+    case OffsetId::HumanoidMaxHealth: return "Humanoid.MaxHealth";
     case OffsetId::BasePartPrimitive: return "BasePart.Primitive";
     case OffsetId::PrimitiveAssemblyAngularVelocity: return "Primitive.AssemblyAngularVelocity";
     case OffsetId::PrimitiveAssemblyLinearVelocity: return "Primitive.AssemblyLinearVelocity";

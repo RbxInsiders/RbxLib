@@ -7,6 +7,7 @@
 #include <RbxLib/Client/RobloxClient.h>
 #include <RbxLib/Instances/BasePart.h>
 #include <RbxLib/Instances/DataModel.h>
+#include <RbxLib/Instances/Humanoid.h>
 #include <RbxLib/Instances/Instance.h>
 #include <RbxLib/Instances/Player.h>
 #include <RbxLib/Instances/Primitive.h>

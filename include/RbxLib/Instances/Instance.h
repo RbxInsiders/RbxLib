@@ -44,6 +44,8 @@ protected:
         std::uintptr_t offset, std::string_view fieldName) const;
     [[nodiscard]] Core::Result<std::int32_t> ReadInt32Field(
         std::uintptr_t offset, std::string_view fieldName) const;
+    [[nodiscard]] Core::Result<float> ReadFloatField(
+        std::uintptr_t offset, std::string_view fieldName) const;
     [[nodiscard]] Core::Result<std::string> ReadStringField(
         std::uintptr_t offset, std::string_view fieldName) const;
 

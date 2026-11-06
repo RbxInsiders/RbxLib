@@ -189,6 +189,10 @@ RobloxClient::RobloxClient(
         Offsets::OffsetId::PlayerAccountAge).value_or(0);
     m_session->PlayerModelInstance = offsets.TryGet(
         Offsets::OffsetId::PlayerModelInstance).value_or(0);
+    m_session->HumanoidHealth = offsets.TryGet(
+        Offsets::OffsetId::HumanoidHealth).value_or(0);
+    m_session->HumanoidMaxHealth = offsets.TryGet(
+        Offsets::OffsetId::HumanoidMaxHealth).value_or(0);
     m_session->BasePartPrimitive = offsets.TryGet(
         Offsets::OffsetId::BasePartPrimitive).value_or(0);
     m_session->PrimitiveAssemblyAngularVelocity = offsets.TryGet(

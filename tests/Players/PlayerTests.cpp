@@ -1,5 +1,6 @@
 #include <RbxLib/Client/RobloxClient.h>
 #include <RbxLib/Instances/BasePart.h>
+#include <RbxLib/Instances/Humanoid.h>
 #include <RbxLib/Instances/Player.h>
 #include <RbxLib/Offsets/OffsetProvider.h>
 
@@ -94,6 +95,39 @@ TEST_F(LivePlayerTestFixture, RejectsNonPlayerInstances) {
     const auto player = Player::FromInstance(workspace.Value());
     EXPECT_FALSE(player.Succeeded());
     EXPECT_NE(player.Message().find("not a Player"), std::string::npos);
+}
+
+TEST_F(LivePlayerTestFixture, ReadsHumanoidHealthFields) {
+    const auto client = MakeClient();
+    const auto dataModel = client->GetDataModel();
+    ASSERT_TRUE(dataModel.Succeeded()) << dataModel.Message();
+
+    const auto playersService = dataModel.Value().FindFirstChildOfClass("Players");
+    ASSERT_TRUE(playersService.Succeeded()) << playersService.Message();
+    const auto players = playersService.Value().GetChildren();
+    ASSERT_TRUE(players.Succeeded()) << players.Message();
+    ASSERT_FALSE(players.Value().empty());
+
+    const auto player = Player::FromInstance(players.Value().front());
+    ASSERT_TRUE(player.Succeeded()) << player.Message();
+    const auto character = player.Value().Character();
+    ASSERT_TRUE(character.Succeeded()) << character.Message();
+    ASSERT_TRUE(character.Value().IsValid()) << "Player has no spawned character";
+
+    const auto humanoidInstance = character.Value().FindFirstChildOfClass("Humanoid");
+    ASSERT_TRUE(humanoidInstance.Succeeded()) << humanoidInstance.Message();
+    ASSERT_TRUE(humanoidInstance.Value().IsValid());
+    const auto humanoid = Humanoid::FromInstance(humanoidInstance.Value());
+    ASSERT_TRUE(humanoid.Succeeded()) << humanoid.Message();
+
+    const auto health = humanoid.Value().Health();
+    const auto maxHealth = humanoid.Value().MaxHealth();
+    ASSERT_TRUE(health.Succeeded()) << health.Message();
+    ASSERT_TRUE(maxHealth.Succeeded()) << maxHealth.Message();
+    EXPECT_TRUE(std::isfinite(health.Value()));
+    EXPECT_TRUE(std::isfinite(maxHealth.Value()));
+    EXPECT_GE(health.Value(), 0.0f);
+    EXPECT_GT(maxHealth.Value(), 0.0f);
 }
 
 TEST_F(LivePlayerTestFixture, ReadsCharacterBasePartPrimitiveFields) {

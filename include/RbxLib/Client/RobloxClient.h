@@ -49,6 +49,8 @@ public:
         std::uintptr_t PlayerDisplayName = 0;
         std::uintptr_t PlayerAccountAge = 0;
         std::uintptr_t PlayerModelInstance = 0;
+        std::uintptr_t HumanoidHealth = 0;
+        std::uintptr_t HumanoidMaxHealth = 0;
         std::uintptr_t BasePartPrimitive = 0;
         std::uintptr_t PrimitiveAssemblyAngularVelocity = 0;
         std::uintptr_t PrimitiveAssemblyLinearVelocity = 0;

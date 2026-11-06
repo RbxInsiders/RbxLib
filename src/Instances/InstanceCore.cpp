@@ -187,6 +187,21 @@ Core::Result<std::int32_t> Instance::ReadInt32Field(
     return ReadValue<std::int32_t>(session, address.Value(), fieldName);
 }
 
+Core::Result<float> Instance::ReadFloatField(
+    const std::uintptr_t offset,
+    const std::string_view fieldName) const {
+    const auto session = GetSession(m_session);
+    if (!IsValid()) {
+        return Core::Result<float>::Failure("Instance is not valid");
+    }
+
+    const auto address = FieldAddress(m_address, offset, fieldName);
+    if (!address.Succeeded()) {
+        return Core::Result<float>::Failure(address.Message());
+    }
+    return ReadValue<float>(session, address.Value(), fieldName);
+}
+
 Core::Result<std::string> Instance::ReadStringField(
     const std::uintptr_t offset,
     const std::string_view fieldName) const {
