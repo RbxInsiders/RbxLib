@@ -45,6 +45,7 @@ else()
         DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     )
     FetchContent_MakeAvailable(winux)
+    set(RBXLIB_WINUX_SOURCE_DIR "${winux_SOURCE_DIR}")
 endif()
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Sources.cmake")
@@ -73,9 +74,11 @@ target_include_directories(RbxLib
 target_link_libraries(RbxLib
     PUBLIC
         nlohmann_json::nlohmann_json
-    PRIVATE
-        Winux
 )
+
+include("${RBXLIB_WINUX_SOURCE_DIR}/cmake/StaticLibMerge.cmake")
+add_dependencies(RbxLib Winux)
+winux_merge_static_libraries(RbxLib Winux)
 
 option(RBXLIB_BUILD_EXAMPLES "Build RbxLib showcase programs" OFF)
 if(RBXLIB_BUILD_EXAMPLES)

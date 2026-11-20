@@ -2,6 +2,8 @@
 
 #include <Winux/Winux.h>
 
+#include <string>
+
 namespace RbxLib::Core {
 
 Result<void> Process::Initialize() {
@@ -18,7 +20,8 @@ void Process::Shutdown() noexcept {
 
 Result<std::optional<std::uint32_t>> Process::Find(
     const std::wstring_view name) {
-    const auto result = Winux::Get<Winux::Process>().FindProcess(name);
+    const auto result = Winux::Get<Winux::Process>().FindProcess(
+        std::wstring(name));
     if (result.Failed()) {
         return Result<std::optional<std::uint32_t>>::Failure(result.Message());
     }

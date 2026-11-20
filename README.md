@@ -14,7 +14,9 @@ A small example is here if you desire, it reads the game's place ID:
 #include <iostream>
 
 int main() {
-    RbxLib::Core::Process::Initialize();
+    if (!RbxLib::Core::Process::Initialize().Succeeded()) {
+        return 1;
+    }
 
     const auto process = RbxLib::Core::Process::Find(
         L"RobloxPlayerBeta.exe");
