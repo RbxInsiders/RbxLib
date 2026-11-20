@@ -77,6 +77,15 @@ target_link_libraries(RbxLib
         Winux
 )
 
+option(RBXLIB_BUILD_EXAMPLES "Build RbxLib showcase programs" OFF)
+if(RBXLIB_BUILD_EXAMPLES)
+    add_executable(RbxLibShowcase examples/Showcase.cpp)
+    target_link_libraries(RbxLibShowcase
+        PRIVATE
+            RbxLib::RbxLib
+    )
+endif()
+
 if(BUILD_TESTING)
     find_package(GTest CONFIG REQUIRED)
     include(GoogleTest)
